@@ -38,10 +38,9 @@ public abstract class AbstractServerHolderImpl<T> implements Holder {
     public T get(String clusterId, String namespace) {
         final String finalNamespace = Optional.ofNullable(namespace).orElse(Strings.EMPTY);
         String key = Joiner.on("_").join(clusterId, finalNamespace);
-
         serviceMap.computeIfAbsent(key, clusterKey -> {
             try {
-                log.info("Starting create cluster server, clusterId={}", clusterId);
+                log.info("Starting create cluster server, clusterId={}, namespace={}", clusterId, namespace);
                 return createServer(clusterId, () -> skyWalkerCacheServices.getClusterConnectKey(clusterId),
                     finalNamespace);
             } catch (Exception e) {
